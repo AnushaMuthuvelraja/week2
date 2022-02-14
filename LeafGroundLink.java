@@ -8,20 +8,32 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class LeafGroundLink {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 
 		WebDriverManager.chromedriver().setup();
 		ChromeDriver driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get("http://leafground.com/pages/Link.html");
+		//driver.findElement(By.linkText("Go to Home Page")).click();
+		System.out.println(driver.findElement(By.linkText("Find where am supposed to go without clicking me?")).getAttribute("href"));
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//a[text()='Verify am I broken?']")).click();
+		String title = driver.getTitle();
+		if(title.equals("HTTP Status 404 – Not Found")) 
+		{
+			System.out.println("Broken Link");
+		}
+		else 
+		{
+			System.out.println("Not Borken Link");
+		}
 
-		 driver.findElement(By.xpath("//a[text()='Verify am I broken?']")).click();
-		// driver.findElement(By.xpath("(//div[@class='large-6 small-12columns']/preceding ::a)[4]")).click();
-		String attribute = driver.findElement(By.linkText("Find where am supposed to go without clicking me?")).getAttribute("href");
-		System.out.println(attribute);
-		java.util.List<WebElement> numberOfLinks = driver.findElements(By.tagName("a"));
-		System.out.println(numberOfLinks.size());
-        driver.findElement(By.xpath("(//a[text()='Go to Home Page'])[2]")).click();
+		int totalLinks = driver.findElements(By.tagName("a")).size();
+		System.out.println(totalLinks);
+
+
+
 	}
 
 }
+
